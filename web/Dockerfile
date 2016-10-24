@@ -13,7 +13,7 @@ MAINTAINER National Institute Of Standards and Technology
 # Directory in container for project source files
 ENV DOCKYARD_SRVPROJ=/srv/mgi-mdcs
 # Git repository
-ENV GIT_REPO=https://github.com/usnistgov/MaterialsResourceRegistry.git
+ENV GIT_REPO=https://github.com/usnistgov/MDCS.git
 
 # Update the default application repository sources list
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
