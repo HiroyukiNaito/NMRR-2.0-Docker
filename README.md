@@ -6,6 +6,7 @@ Download docker toolbox at [Docker Toolbox](https://www.docker.com/products/dock
 >  Docker Compose,
 >  Docker Machine
 >  and Kitematic
+
 ## On Linux
 
 ### Get Docker
@@ -20,6 +21,7 @@ $ sudo pip install docker-compose
 
 ## Run the software for the first time
 > You might need to launch the following commands with root privileges
+
 ### Build the docker-compose.yml file
 ```
 $ docker-compose build
@@ -30,6 +32,7 @@ $ docker-compose build
 $ docker-compose up db
 ```
 > Wait for the launch of the database 
+
 #### Connect to the container to launch the init script
 In a new tab or console:
 ```
@@ -47,6 +50,7 @@ $ docker-compose stop db
 $ docker-compose up web
 ```
 > Wait for the launch of django 
+
 #### Connect to the container to launch the init script
 In a new tab or console:
 ```
@@ -64,6 +68,7 @@ $ docker-compose stop web
 $ docker-compose up -d
 ```
 > The `-d` parameter launches the project in detach mode
+
 ## Stop the software
 ```
 $ docker-compose stop
