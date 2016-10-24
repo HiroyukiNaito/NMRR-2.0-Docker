@@ -7,7 +7,6 @@ web:
     - redis
     - postgres
   volumes:
-#    - ./local_settings.py:/srv/mgi-mdcs/mgi/local_settings.py
     - ./settings.py:/srv/mgi-mdcs/mgi/settings.py  
     - /srv/mgi-mdcs/
   environment:
@@ -64,11 +63,3 @@ redis:
     - "6379:6379"
   volumes:
     - ./redis/data:/data
-    
-#celery:
-#  build: ./celery
-#  container_name: celery
-#  links:
-#    - web
-#  volumes_from:
-#    - web
