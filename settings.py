@@ -24,7 +24,7 @@ import os
 from django.core.urlresolvers import reverse_lazy
 from mongoengine import connect
 
-VERSION = "BETA"
+VERSION = "1.5_rc1"
 
 FORCE_SCRIPT_NAME = ""
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -52,12 +52,12 @@ else:
     ALLOWED_HOSTS = ['*']
 
     os.environ['HTTPS'] = "on"
-    # https://docs.djangoproject.com/en/1.7/ref/settings/#csrf-cookie-secure
-    # CSRF_COOKIE_SECURE = True
-    # CSRF_COOKIE_AGE = 604800
-    # SESSION_COOKIE_AGE = 604800
-    # https://docs.djangoproject.com/en/1.7/ref/settings/#session-cookie-secure
-    # SESSION_COOKIE_SECURE = True
+    
+    
+    
+    
+    
+    
 
     X_FRAME_OPTIONS = 'SAMEORIGIN'
 
@@ -75,11 +75,10 @@ else:
 
 #SMTP Configuration
 USE_EMAIL = False #Send email, True or False
-SERVER_EMAIL = 'noreply@nmrr.org'
-ADMINS = [('admin', 'admin@nmrr.org')]
-MANAGERS = [('manager', 'moderator@nmrr.org'),]
-EMAIL_SUBJECT_PREFIX = "[NMRR] "
-
+SERVER_EMAIL = 'noreply@noreply.gov'
+ADMINS = [('admin', 'noreply@noreply.gov'),]
+MANAGERS = [('manager', 'noreply@noreply.gov'),]
+EMAIL_SUBJECT_PREFIX = "[MDCS] "
 #EMAIL_HOST = ""
 #EMAIL_HOST_USER = ""
 #EMAIL_HOST_PASSWORD = ""
@@ -133,7 +132,7 @@ BLOB_HOSTER = 'GridFS'
 BLOB_HOSTER_URI = MONGODB_URI
 BLOB_HOSTER_USER = MONGO_MGI_USER
 BLOB_HOSTER_PSWD = MONGO_MGI_PASSWORD
-MDCS_URI = 'http://127.0.0.1:8000'
+MDCS_URI = 'http://127.0.0.1'
 
 #Celery configuration
 USE_BACKGROUND_TASK = True
@@ -149,19 +148,20 @@ HANDLE_SERVER_SCHEMA = ''
 HANDLE_SERVER_USER = ''
 HANDLE_SERVER_PSWD = ''
 
-# Customization: Registry
-CUSTOM_TITLE = 'Materials Resource Registry'
+# Customization: MGI
+CUSTOM_TITLE = 'Materials Data'
 CUSTOM_ORGANIZATION = ''
-CUSTOM_NAME = 'NMRR'
+CUSTOM_NAME = 'Curator'
 CUSTOM_SUBTITLE = 'Part of the Materials Genome Initiative'
 CUSTOM_DATA = 'Materials Data'
-CUSTOM_CURATE = 'Add your resource'
-CUSTOM_EXPLORE = 'Search for resources'
+CUSTOM_CURATE = 'Data Curation'
+CUSTOM_EXPLORE = 'Data Exploration'
+CUSTOM_COMPOSE = 'Composer'
 CUSTOM_URL = '#'
 
 # OAI_PMH parameters
 OAI_ADMINS = (
-    ('Administrator', 'admin@nmrr.com'),
+    ('Administrator', 'noreply@noreply.gov'),
 )
 HOST = '127.0.0.1'
 OAI_HOST_URI = MDCS_URI
