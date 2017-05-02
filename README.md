@@ -36,7 +36,7 @@ $ docker-compose up db
 #### Connect to the container to launch the init script
 In a new tab or console:
 ```
-$ docker exec -i -t db_mongo /bin/bash
+$ docker exec -it db_mongo /bin/bash
 $ ./set_mongodb_password
 $ exit
 ```
@@ -45,22 +45,22 @@ Stop the container:
 $ docker-compose stop db
 ```
 ### Create the super user
-#### Launch the web container
+#### Launch the mdcs container
 ```
-$ docker-compose up web
+$ docker-compose up mdcs
 ```
-> Wait for the launch of django 
+> Wait for the launch of mdcs 
 
 #### Connect to the container to launch the init script
 In a new tab or console:
 ```
-$ docker exec -i -t django /bin/bash
+$ docker exec -it mdcs /bin/bash
 $ ./add_super_user
 $ exit
 ```
 Stop the container:
 ```
-$ docker-compose stop web
+$ docker-compose stop mdcs
 ```
 
 ## Run the software
