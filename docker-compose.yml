@@ -1,4 +1,4 @@
-web:
+mdcs:
   build: ./web
   restart: always
   container_name: mdcs
@@ -33,9 +33,9 @@ nginx:
     - "80:80"
     - "443:443"
   links:
-    - web
+    - mdcs
   volumes_from:
-    - web
+    - mdcs
   volumes:
     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     - ./nginx/default.conf:/etc/nginx/conf.d/default.conf

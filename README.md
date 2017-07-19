@@ -37,7 +37,7 @@ $ docker-compose up db
 In a new tab or console:
 ```
 $ docker exec -it db_mongo /bin/bash
-$ ./set_mongodb_password
+$ ./set_mongodb_password.sh
 $ exit
 ```
 Stop the container:
