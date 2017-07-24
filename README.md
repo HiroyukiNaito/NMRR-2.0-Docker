@@ -55,7 +55,7 @@ $ docker-compose up mdcs
 In a new tab or console:
 ```
 $ docker exec -it mdcs /bin/bash
-$ ./add_super_user
+$ ./add_super_user.sh
 $ exit
 ```
 Stop the container:
