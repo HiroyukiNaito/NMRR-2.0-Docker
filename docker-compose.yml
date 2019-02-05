@@ -1,65 +1,96 @@
-mdcs:
-  build: ./web
-  restart: always
-  container_name: mdcs
-  links:
-    - db
-    - redis
-    - postgres
-  volumes:
-    - ./settings.py:/srv/mgi-mdcs/mgi/settings.py  
-    - /srv/mgi-mdcs/
-  environment:
-    - DJANGO_SETTINGS_MODULE=mgi.settings
-    
-postgres:
-  image: postgres:latest
-  restart: always
-  container_name: postgres
-  ports:
-    - "5432:5432"
-  volumes:
-    - ./postgres/pgdata:/var/lib/postgresql/data/
-  environment:
-    - POSTGRES_USER=mgiUser
-    - POSTGRES_PASSWORD=pass4mgiUser123
-    - POSTGRES_DB=mgi
+version: '3'
 
-nginx:
-  image: nginx:latest
-  restart: always
-  container_name: nginx
-  ports:
-    - "80:80"
-    - "443:443"
-  links:
-    - mdcs
-  volumes_from:
-    - mdcs
-  volumes:
-    - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+services:
+  mdcs:
+    build: ./web
+    restart: always
+    container_name: mdcs
+    networks:
+      mdcs_network:
+        aliases:
+         - mdcs.svc
+    links:
+      - db
+      - redis
+      - postgres
+    volumes:
+      - ./settings.py:/srv/mgi-mdcs/mgi/settings.py  
+      - /srv/mgi-mdcs/
+    environment:
+      - DJANGO_SETTINGS_MODULE=mgi.settings
+      
+  postgres:
+    image: postgres:latest
+    restart: alwaysi
+    container_name: postgres
+    networks:
+      mdcs_network:
+        aliases:
+         - postgres.svc
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=mgiUser
+      - POSTGRES_PASSWORD=pass4mgiUser123
+      - POSTGRES_DB=mgi
+  
+  nginx:
+    image: nginx:latest
+    restart: always
+    container_name: nginx
+    networks:
+      mdcs_network:
+        aliases:
+         - nginx.svc
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - mdcs
+    #volumes_from:
+    #  - mdcs
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+  
+  db:
+    image: mongo:latest
+    restart: always
+    container_name: db_mongo
+    networks:
+      mdcs_network:
+        aliases:
+         - db_mongo.svc
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db/
+      - ./db/set_mongodb_password.sh:/set_mongodb_password.sh
+    environment:
+      - MONGODB_ADMIN=admin
+      - MONGODB_ADMIN_PASS=admin
+      - MONGODB_MGI=mgi_user
+      - MONGODB_MGI_PASS=mgi_password
+  
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    networks:
+      mdcs_network:
+        aliases:
+         - redis.svc
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/data
 
-db:
-  image: mongo:latest
-  restart: always
-  container_name: db_mongo
-  ports:
-    - "27017:27017"
-  volumes:
-    - ./db/data/db/:/data/db/
-    - ./db/set_mongodb_password.sh:/set_mongodb_password.sh
-  environment:
-    - MONGODB_ADMIN=admin
-    - MONGODB_ADMIN_PASS=admin
-    - MONGODB_MGI=mgi_user
-    - MONGODB_MGI_PASS=mgi_password
+volumes:
+  mongo-data:
+  pg-data:
 
-redis:
-  image: redis:latest
-  restart: always
-  container_name: redis
-  ports:
-    - "6379:6379"
-  volumes:
-    - ./redis/data:/data
+networks:
+  mdcs_netwrk:
+    driver: bridge    
