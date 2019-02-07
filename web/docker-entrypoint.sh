@@ -14,11 +14,12 @@ done
 
 echo "  ---------------------Start celery-----------------------"
 rm -f *.pid
-#celery multi start -A mgi worker -l info -Ofair --purge
-su -m myuser -c "celery multi start -A mgi worker -l info -Ofair --purge"
+celery multi start -A mdcs worker -l info -Ofair --purge
+chmod 777 ./worker.log
+su -m myuser -c "celery multi start -A mdcs worker -l info -Ofair --purge"
 
 # Wait for celery
-until celery -A mgi status 2>/dev/null; do
+until celery -A mdcs status 2>/dev/null; do
 	echo "=> $(date) - Waiting for confirmation of Celery service startup"
  	sleep 1
 done
@@ -32,5 +33,7 @@ python manage.py collectstatic --noinput
     
 # Start Django
 echo "  ----------------------Start Django-----------------------"
-uwsgi --socket mysite.sock --chdir /srv/mgi-mdcs/ --wsgi-file /srv/mgi-mdcs/mgi/wsgi.py --chmod-socket=666
+# uwsgi --socket mysite.sock --chdir /srv/mgi-mdcs/ --wsgi-file /srv/mgi-mdcs/mdcs/wsgi.py --chmod-socket=666
+# uwsgi --wsgi-file /srv/mgi-mdcs/mdcs/wsgi.py --static-map /static=./static --http 0.0.0.0:8000
+python manage.py runserver 0.0.0.0:8000
 echo Started
