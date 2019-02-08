@@ -29,7 +29,7 @@ RUN apt-get install -y netcat
 
 # Git clone
 RUN git clone --branch master $GIT_REPO $DOCKYARD_SRVPROJ
-RUN chmod 777 $DOCKYARD_SRVPROJ
+# RUN chmod 777 $DOCKYARD_SRVPROJ
 
 # mongoengine
 RUN git clone --branch v0.2.1 "https://github.com/MongoEngine/django-mongoengine.git"
@@ -43,19 +43,25 @@ RUN pip install -r $DOCKYARD_SRVPROJ/requirements.core.txt
 # Install uwsgi
 RUN pip install uwsgi
 
+# Add superuser script
+COPY add_super_user.sh $DOCKYARD_SRVPROJ/add_super_user.sh
+RUN chmod +x $DOCKYARD_SRVPROJ/add_super_user.sh
+
+# Copy entrypoint script into the image
+WORKDIR $DOCKYARD_SRVPROJ
+COPY ./docker-entrypoint.sh /srv/mgi-mdcs/
+RUN chmod +x /srv/mgi-mdcs/docker-entrypoint.sh
+
 # Port to expose
 EXPOSE 8000
 
 # create unprivileged user
 RUN adduser --disabled-password --gecos '' myuser
 
-# Add superuser script
-COPY add_super_user.sh $DOCKYARD_SRVPROJ/add_super_user.sh
-RUN chmod +x $DOCKYARD_SRVPROJ/add_super_user.sh
+# user change
+RUN chown myuser:myuser -R $DOCKYARD_SRVPROJ
+USER myuser
+RUN chmod 700 $DOCKYARD_SRVPROJ
 
 
-# Copy entrypoint script into the image
-WORKDIR $DOCKYARD_SRVPROJ
-COPY ./docker-entrypoint.sh /srv/mgi-mdcs/
-RUN chmod +x /srv/mgi-mdcs/docker-entrypoint.sh
 ENTRYPOINT ["/srv/mgi-mdcs/docker-entrypoint.sh"]
