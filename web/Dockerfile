@@ -31,7 +31,7 @@ RUN apt-get install -y netcat
 RUN git clone --branch master $GIT_REPO $DOCKYARD_SRVPROJ
 # RUN chmod 777 $DOCKYARD_SRVPROJ
 
-# mongoengine
+# Mongoengine
 RUN git clone --branch v0.2.1 "https://github.com/MongoEngine/django-mongoengine.git"
 RUN cd django-mongoengine && pip install .
 
@@ -55,13 +55,12 @@ RUN chmod +x /srv/mgi-mdcs/docker-entrypoint.sh
 # Port to expose
 EXPOSE 8000
 
-# create unprivileged user
+# Create unprivileged user
 RUN adduser --disabled-password --gecos '' myuser
 
-# user change
+# User change
 RUN chown myuser:myuser -R $DOCKYARD_SRVPROJ
 USER myuser
 RUN chmod 700 $DOCKYARD_SRVPROJ
-
 
 ENTRYPOINT ["/srv/mgi-mdcs/docker-entrypoint.sh"]
