@@ -7,7 +7,7 @@
 FROM ubuntu:16.04
 
 # Set the file maintainer (your name - the file's author)
-MAINTAINER National Institute Of Standards and Technology
+MAINTAINER Hiroyuki Naito, National Institute for Materials Science
 
 # Set env variables used in this Dockerfile (add a unique prefix, such as DOCKYARD)
 # Directory in container for project source files
@@ -25,6 +25,7 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 RUN python get-pip.py
 RUN apt-get -y install git
 RUN apt-get -y install python-psycopg2
+RUN apt-get install -y netcat
 
 # Git clone
 RUN git clone --branch master $GIT_REPO $DOCKYARD_SRVPROJ
@@ -51,7 +52,6 @@ RUN adduser --disabled-password --gecos '' myuser
 # Add superuser script
 COPY add_super_user.sh $DOCKYARD_SRVPROJ/add_super_user.sh
 RUN chmod +x $DOCKYARD_SRVPROJ/add_super_user.sh
-RUN apt-get install -y netcat
 
 
 # Copy entrypoint script into the image
