@@ -1,11 +1,4 @@
 #!/bin/bash
-
-# Wait for postgres
-until nc -z postgres 5432; do
-    echo "=> $(date) - Waiting for confirmation of Postgres service startup"
-    sleep 1
-done
-
 # Wait for mongodb
 until nc -z db_mongo 27017; do
     echo "=> $(date) - Waiting for confirmation of MongoDB service startup"

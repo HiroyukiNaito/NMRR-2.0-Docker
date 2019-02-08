@@ -44,24 +44,6 @@ Stop the container:
 ```
 $ docker-compose stop db
 ```
-### Create the super user
-#### Launch the mdcs container
-```
-$ docker-compose up mdcs
-```
-> Wait for the launch of mdcs 
-
-#### Connect to the container to launch the init script
-In a new tab or console:
-```
-$ docker exec -it mdcs /bin/bash
-$ ./add_super_user.sh
-$ exit
-```
-Stop the container:
-```
-$ docker-compose stop mdcs
-```
 
 ## Run the software
 ```
@@ -77,6 +59,10 @@ $ docker-compose stop
 ## Access
 For the access, go to : http://127.0.0.1:80/
 
+## Initial Super user
+
+* username: mgi_superuser
+* password: mgi_superuser_pwd
 
 
 
