@@ -16,8 +16,8 @@ services:
       - redis
       - postgres
     volumes:
-      - ./settings.py:/srv/mgi-mdcs/mdcs/settings.py  
-      - /srv/mgi-mdcs/
+      - ./settings.py:/srv/mgi-mdcs/mdcs/settings.py
+      - ./add_super_user.sh:/srv/mgi-mdcs/add_super_user.sh
     environment:
       - DJANGO_SETTINGS_MODULE=mdcs.settings
       
