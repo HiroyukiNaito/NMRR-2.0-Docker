@@ -26,25 +26,6 @@ $ sudo pip install docker-compose
 ```
 $ docker-compose build
 ```
-### Init the mongo database
-#### Launch the container
-```
-$ docker-compose up db
-```
-> Wait for the launch of the database 
-
-#### Connect to the container to launch the init script
-In a new tab or console:
-```
-$ docker exec -it db_mongo /bin/bash
-$ ./set_mongodb_password.sh
-$ exit
-```
-Stop the container:
-```
-$ docker-compose stop db
-```
-
 ## Run the software
 ```
 $ docker-compose up -d
@@ -57,16 +38,10 @@ $ docker-compose stop
 ```
 
 ## Access
-For the access, go to : http://127.0.0.1:80/
+For the access, go to : http://127.0.0.1/
 
 ## Initial Super user
 
 * username: mgi_superuser
 * password: mgi_superuser_pwd
-
-
-
-
-
-
 
