@@ -25,7 +25,7 @@ python manage.py collectstatic --noinput
 
 # Superuser Create
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('mgi_superuser', 'user_email@institution.com', 'mgi_superuser_pwd')" | python manage.py shell
-    
+
 # Start Django
 echo "  ----------------------Start Django-----------------------"
 # uwsgi --socket mysite.sock --chdir /srv/mgi-mdcs/ --wsgi-file /srv/mgi-mdcs/mdcs/wsgi.py --chmod-socket=666

@@ -6,7 +6,6 @@ services:
     restart: always
     ports:
       - "8000"
-    container_name: mdcs
     depends_on:
       - db
       - redis
@@ -14,22 +13,28 @@ services:
       - ./settings.py:/srv/mgi-mdcs/mdcs/settings.py
     environment:
       - DJANGO_SETTINGS_MODULE=mdcs.settings
-      
+    networks:
+      mdcs_network:
+        aliases:
+          - mdcs      
+
   nginx:
     image: nginx:latest
     restart: always
-    container_name: nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      mdcs_network:
+        aliases:
+          - nginx
   
   db:
     image: mongo:3.4
     restart: always
-    container_name: db_mongo
     ports:
       - "27017"
     volumes:
@@ -40,15 +45,37 @@ services:
       - MONGODB_ADMIN_PASS=admin
       - MONGODB_USER=mgi_user
       - MONGODB_PASSWORD=mgi_password
-  
+    networks:
+      mdcs_network:
+        aliases:
+          - db_mongo
+
+  db_client:
+    image: mongo:3.4
+    depends_on: 
+      - db
+    ports:
+      - "27017"
+    volumes:
+      - ./db/set_mongodb_password.sh:/set_mongodb_password.sh
+    entrypoint: []
+    command: bash -c "/set_mongodb_password.sh"
+    networks:
+      mdcs_network:
+        aliases:
+          - db_client
+
   redis:
     image: redis:5
     restart: always
-    container_name: redis
     ports:
       - "6379"
     volumes:
       - ./redis/data:/data
+    networks:
+      mdcs_network:
+        aliases:
+          - redis
 
 volumes:
   mongo-data:
