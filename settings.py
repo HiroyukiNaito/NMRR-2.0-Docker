@@ -25,19 +25,6 @@ MENU_SELECT_PARENTS = False
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'USER':"mgiUser",
-            'PASSWORD': "pass4mgiUser123",
-            'NAME': 'mgi',   
-            'HOST': 'postgres',
-            'PORT': 5432,                   
-        }
-}
-
-
 
 
 # Application definition
