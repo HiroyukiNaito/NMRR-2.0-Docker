@@ -25,8 +25,8 @@ RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 RUN python get-pip.py
 RUN apt-get -y install git
 RUN apt-get -y install python-psycopg2
-RUN apt-get install -y netcat
-RUN apt-get install -y gettext
+RUN apt-get -y install netcat
+RUN apt-get -y install gettext
 
 # Git clone
 RUN git clone --branch master $GIT_REPO $DOCKYARD_SRVPROJ

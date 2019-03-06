@@ -19,10 +19,10 @@ done
 # Migrate/superuser
 python manage.py migrate auth
 python manage.py migrate
-python manage.py compilemessages
 
 # Collectstatic
 python manage.py collectstatic --noinput
+python manage.py compilemessages
 
 # Superuser Create
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('mgi_superuser', 'user_email@institution.com', 'mgi_superuser_pwd')" | python manage.py shell
