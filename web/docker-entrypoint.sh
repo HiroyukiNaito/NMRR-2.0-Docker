@@ -7,13 +7,13 @@ done
 
 echo "  ---------------------Start celery-----------------------"
 rm -f *.pid
-celery multi start -A mdcs worker -l info -Ofair --purge
+celery multi start -A nmrr worker -l info -Ofair --purge
 chmod 777 ./worker.log
 
-# Wait for celery
-until celery -A mdcs status 2>/dev/null; do
-	echo "=> $(date) - Waiting for confirmation of Celery service startup"
- 	sleep 1
+Wait for celery
+until celery -A nmrr status 2>/dev/null; do
+   echo "=> $(date) - Waiting for confirmation of Celery service startup"
+   sleep 1
 done
 
 # Migrate/superuser
@@ -28,6 +28,6 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 
 # Start Django
 echo "  ----------------------Start Django-----------------------"
-# uwsgi --socket mysite.sock --chdir /srv/mgi-mdcs/ --wsgi-file /srv/mgi-mdcs/mdcs/wsgi.py --chmod-socket=666
+# uwsgi --socket mysite.sock --chdir /srv/mgi-nmrr/ --wsgi-file /srv/mgi-nmrr/nmrr/wsgi.py --chmod-socket=666
 python manage.py runserver 0.0.0.0:8000
 echo Started

@@ -1,22 +1,22 @@
 version: '3'
 
 services:
-  mdcs:
+  nmrr:
     build: ./web
     restart: always
     ports:
-      - "8000"
+      - "8000:8000"
     depends_on:
       - db
       - redis
     volumes:
-      - ./settings.py:/srv/mgi-mdcs/mdcs/settings.py
+      - ./settings.py:/srv/mgi-nmrr/nmrr/settings.py
     environment:
-      - DJANGO_SETTINGS_MODULE=mdcs.settings
+      - DJANGO_SETTINGS_MODULE=nmrr.settings
     networks:
-      mdcs_network:
+      nmrr_network:
         aliases:
-          - mdcs      
+          - nmrr    
 
   nginx:
     image: nginx:latest
@@ -28,7 +28,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
-      mdcs_network:
+      nmrr_network:
         aliases:
           - nginx
   
@@ -46,7 +46,7 @@ services:
       - MONGODB_USER=mgi_user
       - MONGODB_PASSWORD=mgi_password
     networks:
-      mdcs_network:
+      nmrr_network:
         aliases:
           - db_mongo
 
@@ -61,7 +61,7 @@ services:
     entrypoint: []
     command: bash -c "/set_mongodb_password.sh"
     networks:
-      mdcs_network:
+      nmrr_network:
         aliases:
           - db_client
 
@@ -73,7 +73,7 @@ services:
     volumes:
       - ./redis/data:/data
     networks:
-      mdcs_network:
+      nmrr_network:
         aliases:
           - redis
 
@@ -82,5 +82,5 @@ volumes:
   pg-data:
 
 networks:
-  mdcs_network:
+  nmrr_network:
     driver: bridge    

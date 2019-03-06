@@ -1,5 +1,5 @@
 """
-Django settings for mdcs project.
+Django settings for nmrr project.
 For more information on this file, see
 https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
@@ -8,13 +8,15 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 from mongoengine.connection import connect
+
+from core_main_registry_app import constants
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "ponq)(gd8hm57799)$lup4g9kyvp0l(9)k-3!em7dddn^(y)!5"
+SECRET_KEY = '<secret_key>'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -23,9 +25,9 @@ ALLOWED_HOSTS = ['*']
 
 MENU_SELECT_PARENTS = False
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'
-
-
+REGISTRY_XSD_FILENAME = constants.NMRR_XSD_FILENAME
+""" str: Registry xsd filename used for the initialisation.
+"""
 
 # Application definition
 
@@ -37,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
-    'oauth2_provider',
 
     # Extra apps
     "password_policies",
@@ -49,35 +50,32 @@ INSTALLED_APPS = (
 
     # Core apps
     "core_main_app",
-    "core_exporters_app",
-    "core_exporters_app.exporters.xsl",
+    "core_main_registry_app",
     "core_website_app",
     "core_oaipmh_common_app",
     "core_oaipmh_harvester_app",
     "core_oaipmh_provider_app",
+    "core_curate_registry_app",
     "core_curate_app",
     "core_parser_app",
     "core_parser_app.tools.modules",  # FIXME: make modules an app
     "core_parser_app.tools.parser",  # FIXME: make parser an app
-    "core_composer_app",
-    "core_explore_federated_search_app",
-    "core_federated_search_app",
+    "core_explore_keyword_registry_app", # /!\ Should always be before core_explore_common_app
+    "core_explore_keyword_app",
     "core_explore_common_app",
     "core_explore_oaipmh_app",
-    "core_explore_example_app",
-    "core_explore_keyword_app",
-    "core_dashboard_app",
+    "core_dashboard_registry_app",
     "core_dashboard_common_app",
+    "mptt",
 
-    # modules
-    "core_module_blob_host_app",
-    "core_module_excel_uploader_app",
-    "core_module_periodic_table_app",
-    "core_module_chemical_composition_app",
+    # Modules
+    "core_module_local_id_registry_app",
+    "core_module_status_registry_app",
+    "core_module_fancy_tree_registry_app",
     "core_module_text_area_app",
 
     # Local apps
-    "mdcs_home"
+    "nmrr_home"
 )
 
 MIDDLEWARE = (
@@ -94,7 +92,7 @@ MIDDLEWARE = (
     # 'password_policies.middleware.PasswordChangeMiddleware',
 )
 
-ROOT_URLCONF = 'mdcs.urls'
+ROOT_URLCONF = 'nmrr.urls'
 
 TEMPLATES = [
     {
@@ -116,7 +114,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mdcs.wsgi.application'
+WSGI_APPLICATION = 'nmrr.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -218,8 +216,8 @@ connect(DB_NAME, host=MONGODB_URI)
 SERVER_EMAIL = ""
 EMAIL_SUBJECT_PREFIX = ""
 USE_EMAIL = False
-ADMINS = [('admin', 'admin@curator.org')]
-MANAGERS = [('manager', 'moderator@curator.org')]
+ADMINS = [('admin', 'admin@example.com')]
+MANAGERS = [('manager', 'moderator@example.com')]
 
 USE_BACKGROUND_TASK = False
 # FIXME: set a redis password in production
@@ -236,7 +234,7 @@ BROKER_TRANSPORT_OPTIONS = {
 CELERY_RESULT_BACKEND = REDIS_URL
 
 # core_website_app settings
-SERVER_URI = "http://mdcs:8000"
+SERVER_URI = "http://nmrr:8000"
 
 # Password Policy
 # Determines wether to use the password history.
@@ -280,20 +278,19 @@ PASSWORD_WORDS = []
 # ===============================================
 # Choose from:  black, black-light, blue, blue-light, green, green-light, purple, purple-light, red, red-light, yellow,
 #               yellow-light
-WEBSITE_ADMIN_COLOR = "yellow"
+WEBSITE_ADMIN_COLOR = "blue"
 
-WEBSITE_SHORT_TITLE = "MDCS"
+WEBSITE_SHORT_TITLE = "NMRR"
 
 DATA_AUTO_PUBLISH = True
 
 # Customization Label
 CUSTOM_DATA = "Materials Data"
-CUSTOM_TITLE = "Materials Data Curation System"
+CUSTOM_TITLE = "Materials Resource Registry"
 CUSTOM_SUBTITLE = "Part of the Materials Genome Initiative"
-CUSTOM_NAME = "Curator"
+CUSTOM_NAME = "NMRR"
 
-
-DATA_SOURCES_EXPLORE_APPS = ['core_explore_federated_search_app', 'core_explore_oaipmh_app']
+DATA_SOURCES_EXPLORE_APPS = ['core_explore_oaipmh_app']
 
 # FIXME: set desired value before release
 # Lists in data not stored if number of elements is over the limit (e.g. 100)
@@ -321,7 +318,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ),
     # 'DEFAULT_PERMISSION_CLASSES': (
     #     'rest_framework.permissions.IsAuthenticated',
@@ -329,11 +325,27 @@ REST_FRAMEWORK = {
 }
 
 HOMEPAGE_NB_LAST_TEMPLATES = 6
-""" integer: How many templates is displayed on the homepage
-"""
 
 PARSER_DOWNLOAD_DEPENDENCIES = True
-""" boolean: Does the parser download dependencies
+
+# MENU
+CURATE_MENU_NAME = 'Publish resource'
+EXPLORE_MENU_NAME = 'Search for resources'
+
+# Can set workspace public
+CAN_SET_WORKSPACE_PUBLIC = False
+
+# CAN SET PUBLIC DATA TO PRIVATE
+CAN_SET_PUBLIC_DATA_TO_PRIVATE = False
+
+# DASHBOARD
+WORKSPACE_DISPLAY_NAME = 'workspace'
+
+DEFAULT_DATA_RENDERING_XSLT = os.path.join('core_main_registry_app', 'xsl', 'xml2html.xsl')
+
+# Results per page for paginator
+CAN_ANONYMOUS_ACCESS_PUBLIC_DATA = True
+""" boolean: Can anonymous user access public data
 """
 
 EXPLORE_ADD_DEFAULT_LOCAL_DATA_SOURCE_TO_QUERY = True
@@ -344,6 +356,6 @@ SSL_CERTIFICATES_DIR = 'certs'
 """ :py:class:`str`: SSL certificates directory location.
 """
 
-XSD_URI_RESOLVER = 'REQUESTS_RESOLVER'
+XSD_URI_RESOLVER = None
 """ :py:class:`str`: XSD URI Resolver for lxml validation. Choose from:  None, 'REQUESTS_RESOLVER'.
 """

@@ -11,9 +11,9 @@ MAINTAINER Hiroyuki Naito, National Institute for Materials Science
 
 # Set env variables used in this Dockerfile (add a unique prefix, such as DOCKYARD)
 # Directory in container for project source files
-ENV DOCKYARD_SRVPROJ=/srv/mgi-mdcs
+ENV DOCKYARD_SRVPROJ=/srv/mgi-nmrr
 # Git repository
-ENV GIT_REPO=https://github.com/usnistgov/MDCS.git
+ENV GIT_REPO=https://github.com/usnistgov/nmrr.git
 
 # Update the default application repository sources list
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
@@ -39,6 +39,7 @@ RUN cd django-mongoengine && pip install .
 # Install Python dependencies
 RUN pip install -r $DOCKYARD_SRVPROJ/requirements.txt
 RUN pip install -r $DOCKYARD_SRVPROJ/requirements.core.txt
+RUN pip install redis==3.2.0
 
 # Install uwsgi
 RUN pip install uwsgi
@@ -49,8 +50,8 @@ RUN chmod +x $DOCKYARD_SRVPROJ/add_super_user.sh
 
 # Copy entrypoint script into the image
 WORKDIR $DOCKYARD_SRVPROJ
-COPY ./docker-entrypoint.sh /srv/mgi-mdcs/
-RUN chmod +x /srv/mgi-mdcs/docker-entrypoint.sh
+COPY ./docker-entrypoint.sh /srv/mgi-nmrr/
+RUN chmod +x /srv/mgi-nmrr/docker-entrypoint.sh
 
 # Port to expose
 EXPOSE 8000
@@ -63,4 +64,4 @@ RUN chown myuser:myuser -R $DOCKYARD_SRVPROJ
 USER myuser
 RUN chmod 700 $DOCKYARD_SRVPROJ
 
-ENTRYPOINT ["/srv/mgi-mdcs/docker-entrypoint.sh"]
+ENTRYPOINT ["/srv/mgi-nmrr/docker-entrypoint.sh"]
