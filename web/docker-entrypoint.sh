@@ -8,7 +8,7 @@ done
 echo "  ---------------------Start celery-----------------------"
 rm -f *.pid
 celery multi start -A nmrr worker -l info -Ofair --purge
-chmod 777 ./worker.log
+chmod 666 ./worker.log
 
 Wait for celery
 until celery -A nmrr status 2>/dev/null; do
@@ -19,7 +19,8 @@ done
 # Migrate/superuser
 python manage.py migrate auth
 python manage.py migrate
-#echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | ./manage.py shell
+python manage.py compilemessages
+
 # Collectstatic
 python manage.py collectstatic --noinput
 
