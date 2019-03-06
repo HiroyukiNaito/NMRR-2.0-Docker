@@ -10,7 +10,7 @@ rm -f *.pid
 celery multi start -A nmrr worker -l info -Ofair --purge
 chmod 666 ./worker.log
 
-Wait for celery
+# Wait for celery
 until celery -A nmrr status 2>/dev/null; do
    echo "=> $(date) - Waiting for confirmation of Celery service startup"
    sleep 1
