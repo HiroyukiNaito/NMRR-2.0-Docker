@@ -131,7 +131,7 @@ DATABASES = {
           'USER':"mgi_user",
           'PASSWORD': "mgi_password",
           'NAME': 'mgi',
-          'HOST': 'psql',
+          'HOST': 'psql.svc',
           'PORT': 5432,
       }
 }
@@ -219,7 +219,7 @@ LOGGING = {
 MONGO_USER = "mgi_user"
 MONGO_PASSWORD = "mgi_password"
 DB_NAME = "mgi"
-DB_SERVER = "db_mongo"
+DB_SERVER = "mongo.svc"
 MONGODB_URI = "mongodb://" + MONGO_USER + ":" + MONGO_PASSWORD + "@" + DB_SERVER + "/" + DB_NAME
 connect(DB_NAME, host=MONGODB_URI)
 
@@ -235,7 +235,7 @@ USE_BACKGROUND_TASK = False
 # REDIS_PASSWORD = 'redispass'
 # REDIS_URL = 'redis://:' + REDIS_PASSWORD + '@localhost:6379/0'
 
-REDIS_URL = 'redis://redis:6379/0'
+REDIS_URL = 'redis://redis.svc:6379/0'
 BROKER_URL = REDIS_URL
 BROKER_TRANSPORT_OPTIONS = {
     'visibility_timeout': 3600,
@@ -245,7 +245,7 @@ BROKER_TRANSPORT_OPTIONS = {
 CELERY_RESULT_BACKEND = REDIS_URL
 
 # core_website_app settings
-SERVER_URI = "http://nmrr:8000"
+SERVER_URI = "http://nmrr.svc:8000"
 
 # Password Policy
 # Determines wether to use the password history.
